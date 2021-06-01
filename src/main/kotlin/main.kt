@@ -1,69 +1,92 @@
 fun main() {
     println("Bem vindo ao ByteBank.")
     //Instancia
-    val contaAlex = Conta()
-    contaAlex.setTitular("Alex")
-    contaAlex.setNumero(1000)
-    contaAlex.setSaldo(-200.0)
+    val contaAlex = Conta("Alex", 1000)
+//    contaAlex.titular = "Alex"
+//    contaAlex.numero = 1000
+    contaAlex.deposita(-200.0)
 
-    var contaFran = Conta()
-    contaFran.setTitular("Fran")
-    contaFran.setNumero(1001)
-    contaFran.setSaldo(300.0)
+    //label - rotulos para identificar parametros com isso não é
+    // necessario inserir em um order especifica "flexibilidade" e possivel usar em contrutor e funções
+    var contaFran = Conta(numero = 1001, titular = "Fran",  teste = 2)
+//    contaFran.titular = "Fran"
+//    contaFran.numero = 1001
+    contaFran.deposita(300.0)
 
-    println(contaAlex.getTitular())
-    println(contaAlex.getNumero())
-    println(contaAlex.getSaldo())
+    println(contaAlex.titular)
+    println(contaAlex.numero)
+    println(contaAlex.saldo)
 
-    println(contaFran.getTitular())
-    println(contaFran.getNumero())
-    println(contaFran.getSaldo())
+    println(contaFran.titular)
+    println(contaFran.numero)
+    println(contaFran.saldo)
 
     println("depositando na conta do Fran")
     //Classe se torna responsavel em alterar seus atributos
     contaAlex.deposita(50.0)
-    println(contaAlex.getSaldo())
+    println(contaAlex.saldo)
 
     println("depositando na conta do Alex")
     contaFran.deposita(70.0)
-    println(contaFran.getSaldo())
+    println(contaFran.saldo)
 
     println("sacando na conta do Alex")
     contaAlex.saca(250.0)
-    println(contaAlex.getSaldo())
+    println(contaAlex.saldo)
 
     println("sacando na conta da Fran")
     contaFran.saca(100.0)
-    println(contaFran.getSaldo())
+    println(contaFran.saldo)
 
     println("saque em excesso na conta do Alex")
     contaAlex.saca(100.0)
-    println(contaAlex.getSaldo())
+    println(contaAlex.saldo)
 
     println("saque em excesso na conta da Fran")
     contaFran.saca(500.0)
-    println(contaFran.getSaldo())
+    println(contaFran.saldo)
 
     println("Transferência da conta da Fran para o Alex")
 
-    if (contaFran.transfere(100.0, contaAlex)) {
+    //Label serve para identificação para até entender
+    if (contaFran.transfere(valor = 100.0, destino = contaAlex)) {
         println("Tranferência bem sucedida")
     } else {
         println("Falha na transferência")
     }
 
-    println(contaAlex.getSaldo())
-    println(contaFran.getSaldo())
+    println(contaAlex.saldo)
+    println(contaFran.saldo)
 }
 
-class Conta {
-    private var titular = ""
-    private var numero = 0
-    private var saldo = 0.0
+//Contrutor primario podemos fazer com que os parametros sejam as properties com valores opcionais
+class Conta(
+    val titular: String,
+    val numero: Int,
+    val teste: Int = 9
+) {
+    var saldo = 0.0
+        private set //encapsulamento o deposita faz a funcionalidade do setter
+
+//    Construtor secundario
+//    constructor(titular: String, numero: Int){
+//        this.titular = titular
+//        this.numero = numero
+//    }
+
+    /*
+     Não é preciso implementar uma função para ter o
+     comportamento de getter e setters pois toda variavel ja tem seu get e set
+     no Kotlin e conhecido como propriedade uma variavel que sempre vai ter acesso
+     por meio de um geter e seter proprio
+     */
+
 
     //função menbro da classe - Metodos ou Comportamentos da classe
     fun deposita(valor: Double) {
-        saldo += valor
+        if (valor > 0) {
+            this.saldo += valor
+        }
     }
 
     fun saca(valor: Double) {
@@ -82,32 +105,33 @@ class Conta {
         return false
     }
 
-    fun getSaldo(): Double {
-        return saldo
-    }
-
-    fun setSaldo(valor: Double) {
-        if (valor > 0) {
-            saldo = valor
-        }
-    }
-
-    fun getTitular(): String {
-        return titular
-    }
-
-    fun setTitular(titular: String) {
-        this.titular = titular
-    }
-
-    fun getNumero(): Int {
-        return numero
-    }
-
-    fun setNumero(numero: Int) {
-        this.numero = numero
-
-    }
+// Não é interessante no Kotlin getter e setter pois não é idiomatico
+//    fun getSaldo(): Double {
+//        return saldo
+//    }
+//
+//    fun setSaldo(valor: Double) {
+//        if (valor > 0) {
+//            saldo = valor
+//        }
+//    }
+//
+//    fun getTitular(): String {
+//        return titular
+//    }
+//
+//    fun setTitular(titular: String) {
+//        this.titular = titular
+//    }
+//
+//    fun getNumero(): Int {
+//        return numero
+//    }
+//
+//    fun setNumero(numero: Int) {
+//        this.numero = numero
+//
+//    }
 
 
 }
@@ -121,16 +145,16 @@ fun testaCopiaEReferencias() {
     println("numeroX $numeroX")
     println("numeroY $numeroY")
 
-    val contaJoao = Conta()
-    contaJoao.setTitular("João")
+    val contaJoao = Conta("João", 1002)
+//    contaJoao.titular = "João"
     //Atribuição de referenfia
     //var contaMaria = contaJoao
-    var contaMaria = Conta()
-    contaMaria.setTitular("Maria")
-    //contaJoao.titular = "João"
+    var contaMaria = Conta("Maria", 1003)
+//    contaMaria.titular = "Maria"
+//    contaJoao.titular = "João"
 
-    println("Titular conta João: ${contaJoao.getTitular()}")
-    println("Titular conta Maria: ${contaMaria.getTitular()}")
+    println("Titular conta João: ${contaJoao.titular}")
+    println("Titular conta Maria: ${contaMaria.titular}")
 
     println(contaJoao)
     println(contaMaria)
